@@ -1,4 +1,4 @@
-// Deck component for the Euchre card game app.
+// Deck.tsx component for the Euchre card game app.
 
 import {Card} from './Card';
 import {Rank, Suit} from "./types";

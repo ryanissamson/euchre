@@ -1,4 +1,4 @@
-// Card component for the Euchre card game app.
+// Card.tsx component for the Euchre card game app.
 import {Suit, Rank} from './types';
 
 // Import the SVG images for the cards from the .../assets directory.

@@ -99,7 +99,7 @@ export const Game = ({mode, onReset, firstDealer}: GameProps) => {
                         {players.map((player) => (
                             <div key={player.id} className="player">
                                 {/* use conditional rendering to show "(Dealer)" next to the player name based on the prop value */}
-                                <h3>{player.name} {firstDealer === player.id ? '(Dealer)' : ''}</h3>
+                                <h3 className="player-name"> {player.name} {firstDealer === player.id ? '(Dealer)' : ''}</h3>
                                 <div className="player-hand">
                                     {player.hand.map((card) => (
                                         <div key={card.id} className="card">

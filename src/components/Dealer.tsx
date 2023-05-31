@@ -24,18 +24,29 @@ const Dealer = React.forwardRef((props: DealerProps, ref: React.RefObject<Dealer
 
     // method to deal one card to each player until someone gets a jack
     const dealCards = () => {
-        // loop through the players
-        for (let i = 0; i < 4; i++) {
+        // initialize a variable to store the current player index
+        let currentPlayer = 0;
+
+        // use a while loop that checks if the deck is not empty and the first dealer is not found
+        while (deck.cards.length > 0 && firstDealer === -1) {
             // get the top card from the deck
             let card = deck.cards.pop();
 
             // check if the card is a jack
             if (card && card.rank === Rank.Jack) {
                 // set the first dealer to the current player index
-                setFirstDealer(i);
+                setFirstDealer(currentPlayer);
 
                 // break the loop
                 break;
+            }
+
+            // increment the current player index by one
+            currentPlayer++;
+
+            // if the current player index reaches 4, reset it to 0
+            if (currentPlayer === 4) {
+                currentPlayer = 0;
             }
         }
 
