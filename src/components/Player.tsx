@@ -1,3 +1,4 @@
+// Player.tsx
 import {Card} from './Card';
 
 // class to represent a player in the game

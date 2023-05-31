@@ -1,19 +1,20 @@
-import * as React from 'react';
+// Game.tsx
+import React, {useState, useEffect} from 'react';
 import {Deck} from './Deck';
 import {Player} from './Player';
 import {Card} from './Card';
-import {useSocket} from './useSocket';
-import {useEffect, useState} from "react";
 import '../assets/css/Game.css';
+import {useSocket} from "./useSocket";
 
 // Game component for the Euchre card game.
 
 type GameProps = {
     mode: 'single' | 'multi';
     onReset: () => void;
+    firstDealer: number; // add a prop for the first dealer state
 };
 
-export const Game = ({mode, onReset}: GameProps) => {
+export const Game = ({mode, onReset, firstDealer}: GameProps) => {
     // state to keep track of the deck of cards
     const [deck, setDeck] = useState<Card[]>([]);
 
@@ -97,7 +98,8 @@ export const Game = ({mode, onReset}: GameProps) => {
                     <div className="player-container">
                         {players.map((player) => (
                             <div key={player.id} className="player">
-                                <h3>{player.name}</h3>
+                                {/* use conditional rendering to show "(Dealer)" next to the player name based on the prop value */}
+                                <h3>{player.name} {firstDealer === player.id ? '(Dealer)' : ''}</h3>
                                 <div className="player-hand">
                                     {player.hand.map((card) => (
                                         <div key={card.id} className="card">
@@ -112,16 +114,12 @@ export const Game = ({mode, onReset}: GameProps) => {
                             </div>
                         ))}
                     </div>
-                    <div className="turn-indicator">
-                        <p>Current turn: {turn}</p>
-                    </div>
                 </div>
             ) : status === 'over' ? (
-                <div className="game-over">
-                    <p>Game over!</p>
-                    {winner && <p>The winner is {winner.name}</p>}
-                </div>
+                <p>The winner is {winner?.name}</p>
             ) : null}
         </div>
     );
 };
+
+export default Game;

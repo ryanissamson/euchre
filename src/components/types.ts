@@ -1,4 +1,4 @@
-// Suits and ranks for a standard deck of cards.
+// types.ts Suits and ranks for a standard deck of cards.
 
 export enum Suit {
     Clubs = 'clubs',
