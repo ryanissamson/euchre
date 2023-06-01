@@ -76,7 +76,10 @@ function App() {
             ) : (
                 <div className="game">
                     <div className="table">
-                        {table.topCard && <CardComponent card={table.topCard} />}
+                        {/* add className="top-card" */}
+                        {table.topCard && (
+                            <CardComponent card={table.topCard} className="top-card" />
+                        )}
                     </div>
                     {/* render all-players div */}
                     <div className="all-players">
@@ -89,12 +92,9 @@ function App() {
                             />
                         ))}
                     </div>
-                    {/* pass team prop to TeamComponent */}
-                    <div className="teams">
-                        <TeamComponent team={teams[0]} />
-                        <TeamComponent team={teams[1]} />
-                    </div>
-                    {/* In the top right of the screen, the score of each team is displayed in a box. */}
+                    {/* Game information exists in a bottom bar div below the playing area. */}
+                    <div className="bottom-bar">
+                    <h4>Scores</h4>
                     <div className="score">
                         <p>Team1: {teams[0].score}</p>
                         <p>Team2: {teams[1].score}</p>
@@ -110,6 +110,7 @@ function App() {
                     {/* In the bottom right of the screen, the name of the player whose turn it is to play a card is displayed in a box. */}
                     <div className="turn">
                         {turnIndex !== null && <p>Turn: {players[turnIndex].name}</p>}
+                    </div>
                     </div>
                 </div>
             )}

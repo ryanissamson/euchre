@@ -1,24 +1,25 @@
 // PlayerComponent.tsx
-
 import React from "react";
-import { Player } from "./types";
 import CardComponent from "./CardComponent";
+import { Player } from "./types";
 
-interface PlayerComponentProps {
+interface Props {
     player: Player;
     isDealer: boolean;
     isTurn: boolean;
 }
 
-function PlayerComponent(props: PlayerComponentProps) {
+function PlayerComponent(props: Props) {
     return (
-        <div className={`player ${props.isTurn ? "turn" : ""}`}>
+        <div className="player">
             <h3>{props.player.name}</h3>
             <div className="hand">
                 {props.player.hand.map((card) => (
-                    <CardComponent key={`${card.suit}${card.rank}`} card={card} />
+                    // add className="card"
+                    <CardComponent key={card.suit + card.rank} card={card} className="card" />
                 ))}
             </div>
+            {/* add className="actions" */}
             <div className="actions">
                 {props.isTurn && (
                     <>
@@ -28,6 +29,7 @@ function PlayerComponent(props: PlayerComponentProps) {
                     </>
                 )}
             </div>
+            {/* add className="dealer" */}
             <div className="dealer">{props.isDealer && <p>Dealer</p>}</div>
         </div>
     );
