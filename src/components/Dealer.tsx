@@ -12,7 +12,9 @@ interface DealerProps {
 }
 
 // function to represent the dealer component
-const Dealer = React.forwardRef((props: DealerProps) => {
+// pass the ref parameter as the second argument of React.forwardRef
+// specify the type of the ref parameter as React.RefObject<Dealer>
+const Dealer = React.forwardRef((props: DealerProps, ref: React.RefObject<Dealer>) => {
     // property to store the deck of cards
     const deck = new Deck();
     // property to store the first dealer
