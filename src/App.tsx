@@ -137,6 +137,11 @@ function App() {
                     </div>
 
                     {/* In the bottom right of the screen, the name of the player whose turn it is to play a card is displayed in a box. */}
+                    <div className="turn">
+                        {turnIndex !== null && (
+                            <p>Turn: {players[turnIndex].name}</p>
+                        )}
+                    </div>
                 </div>
             )}
         </div>
