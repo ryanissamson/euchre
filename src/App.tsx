@@ -46,35 +46,6 @@ function App() {
         // deal five cards to each player using the helper function and update their hand
         let dealtPlayers = dealCards(shuffledCards, players);
 
-        // Check each player's hand and log to console if a player has cards of the same suit and matches the top card.
-        // If no player has cards of the same suit, deal the cards again until someone does. When a player has cards of the same suit, log to console that dealing is complete. Also log to console the cards in the hand of the player that matches.
-        let sameSuit = false;
-        while (!sameSuit) {
-            for (let player of dealtPlayers) {
-                let suits = player.hand.map((card) => card.suit);
-                if (suits.every((suit) => suit === suits[0])) {
-                    sameSuit = true;
-                    console.log("Dealing complete!");
-                    console.log(dealtPlayers);
-                    console.log(shuffledCards)
-                    // Check if it matches the top card, and if not, shuffle the cards and deal again.
-                    if (suits[0] !== shuffledCards[shuffledCards.length - 1].suit) {
-                        sameSuit = false;
-                        shuffledCards = shuffleCards(cards);
-                        dealtPlayers = dealCards(shuffledCards, players);
-                        console.log("Dealing again...");
-                        break;
-                    }
-                    break;
-                }
-            }
-            if (!sameSuit) {
-                shuffledCards = shuffleCards(cards);
-                dealtPlayers = dealCards(shuffledCards, players);
-                console.log("Dealing again...");
-            }
-        }
-
         // determine the first dealer using the helper function and assign it to dealer index state hook
         let firstDealerIndex = determineFirstDealer(shuffledCards, players);
 
