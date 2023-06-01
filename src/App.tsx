@@ -68,7 +68,16 @@ function App() {
 
         // increment the dealer index by one (or reset to zero if it reaches four) and assign it to turn index state hook
         setTurnIndex((dealerIndex! + 1) % 4);
+
+        // set trumpSuit state hook based on topCard suit or player choice
+        if ("suit" in table.topCard) {
+            setTrumpSuit(table.topCard.suit);
+        }
     };
+
+    {/* filter players by isHuman property */}
+    const humanPlayer = players.filter((player) => player.isHuman)[0];
+    const computerPlayers = players.filter((player) => !player.isHuman);
 
     return (
         <div className="app">
@@ -83,51 +92,26 @@ function App() {
                         {table.topCard && <CardComponent card={table.topCard} />}
                     </div>
 
-                    {/* and four players */}
-
-                    <div className="players">
-                        {players.map((player, index) => (
-                            <PlayerComponent
-                                key={player.name}
-                                player={player}
-                                isDealer={index === dealerIndex}
-                                isTurn={index === turnIndex}
-                            />
-                        ))}
-                    </div>
-
-                    {/* Player1 is human */}
-
+                    {/* render human-player and computer-players divs */}
                     <div className="human-player">
                         <PlayerComponent
-                            player={players[0]}
+                            player={humanPlayer}
                             isDealer={dealerIndex === 0}
                             isTurn={turnIndex === 0}
                         />
                     </div>
-
-                    {/* The others are computer players */}
-
                     <div className="computer-players">
-                        <PlayerComponent
-                            player={players[1]}
-                            isDealer={dealerIndex === 1}
-                            isTurn={turnIndex === 1}
-                        />
-                        <PlayerComponent
-                            player={players[2]}
-                            isDealer={dealerIndex === 2}
-                            isTurn={turnIndex === 2}
-                        />
-                        <PlayerComponent
-                            player={players[3]}
-                            isDealer={dealerIndex === 3}
-                            isTurn={turnIndex === 3}
-                        />
+                        {computerPlayers.map((player, index) => (
+                            <PlayerComponent
+                                key={player.name}
+                                player={player}
+                                isDealer={dealerIndex === index + 1}
+                                isTurn={turnIndex === index + 1}
+                            />
+                        ))}
                     </div>
 
-                    {/* and are displayed on screen across from each other on table just like Euchre rules state */}
-
+                    {/* pass team prop to TeamComponent */}
                     <div className="teams">
                         <TeamComponent team={teams[0]} />
                         <TeamComponent team={teams[1]} />
