@@ -1,0 +1,103 @@
+/* App.css */
+
+/* Use a green background color for the app */
+.app {
+    background-color: green;
+}
+
+/* Use a white background color for the menu */
+.menu {
+    background-color: white;
+}
+
+/* Use a black text color for the button */
+.button {
+    color: black;
+}
+
+/* Use a green background color for the game */
+.game {
+    background-color: green;
+}
+
+/* Use a white background color for the table */
+.table {
+    background-color: white;
+}
+
+/* Use a fixed width and height for the card */
+.card {
+    width: 100px;
+    height: 150px;
+}
+
+/* Use a border and some padding for the card */
+.card {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+/* Use a large font size and center alignment for the suit and rank */
+.suit,
+.rank {
+    font-size: 36px;
+    text-align: center;
+}
+
+/* Use different colors for different suits */
+.suit.clubs {
+    color: black;
+}
+
+.suit.diamonds {
+    color: red;
+}
+
+.suit.hearts {
+    color: red;
+}
+
+.suit.spades {
+    color: black;
+}
+
+/* Use a flex layout and some margin for the player */
+.player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+/* Use a smaller font size and some margin for the player name */
+.player h3 {
+    font-size: 24px;
+    margin: 10px;
+}
+
+/* Use a flex layout and some gap for the hand */
+.hand {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Use a grid layout and some gap for the actions */
+.actions {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 10px;
+}
+
+/* Use a border and some padding for the buttons */
+.button.call,
+.button.go-alone,
+.button.pass {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+/* Use a yellow background color for the turn indicator */
+.turn {
+    background-color: yellow;
+}

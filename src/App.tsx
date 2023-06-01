@@ -1,33 +1,160 @@
 // App.tsx
-import React, {useState, useEffect} from 'react';
-import {Card} from './components/Card';
-import App_bak from "./App_bak";
 
-// GamePlay for the Euchre card game using stand Euchre card game Stick the Dealer rules from beginning to end.
+import React from "react";
+import CardComponent from "./CardComponent";
+import PlayerComponent from "./PlayerComponent";
+import TeamComponent from "./TeamComponent";
+import { Card, Player, Team } from "./types";
+import { shuffleCards, dealCards, determineFirstDealer } from "./utils";
+
 function App() {
-// Present user with a green menu screen to begin the game and one white button with black text. The text on the button is "Start game".
-// When the user clicks the button, the game begins, showing a green screen, a box in the middle of the screen to represent the table, and four players, Player 1, the human. The others, Player 2, PLayer 3, and Player 4 are computer players and are displayed on the screen across from each other on the table just like Euchre rules state. Players 1 and 3 are on a team and PLayers 2 and 4 are on a team. In the top right of the screen, the score of each team is displayed in a box. In the top left of the screen, the trump is displayed in a box. In the bottom left of the screen, the name of the player who is the dealer is displayed in a box. In the bottom right of the screen, the name of the player whose turn it is to play a card is displayed in a box.
-// The game begins with an animation of the cards being shuffled.
-// The game then determines the first dealer by dealing one card at a time to each player, beginning with a random player. The first player to receive a Jack is the first dealer. The game then updates the name of the player who is the dealer to append "(Dealer)" to their name. Each subsequent round, the dealer is the next player in the rotation to the left.
-// The game then shows an animation, dealing five cards to each player, one at a time, beginning with the player to the left of the dealer and going around the table to the left.
-// The game then shows an animation, dealing one card to the table, face up, called the "top card", to determine the trump suit. The suit of this card is the trump suit for the round.
-// The player after the dealer is then presented with a box which displays the name of the trump suit of the top card above three button options: "Call", "Go alone", or "Pass".
-// If the player clicks "Call", then the dealer must pick up the card and discard one card from their hand.
-// If the player clicks "Go alone", then the dealer must pick up the card and discard one card from their hand. The dealer's partner is not allowed to play in this round.
-// If the player clicks "Pass", then the next player to the left is presented with the same three options.
-// If all four players pass, then an animation shows the top card flipped over.
-// The player to the left of the dealer is then presented with three buttons with names of suits to call any suit other than the suit of the top card that was flipped over.
-// If the player clicks a suit, then the trump is determined to be that suit and the hand begins.
-// If the player clicks "Pass", then the next player to the left is presented with the same three options.
-// If all four players pass, then an animation shows the cards being moved into the middle face down, the hand is over and the next player to the left of the dealer is the dealer for the next round.
-// The player to the left of the dealer begins the hand by playing a card from their hand. The player to the left of the dealer is called the "maker" for the hand.
-// The next player to the left plays a card from their hand.
-// The next player to the left plays a card from their hand.
-// The next player to the left plays a card from their hand.
-// The player who played the highest card of the suit of the maker wins the hand and the cards are moved to a pile in front of the maker.
+    // initialize state hooks for game started, table, players, teams, dealer index, turn index and trump suit
+    const [gameStarted, setGameStarted] = React.useState(false);
+    const [table, setTable] = React.useState<{ topCard: Card | null }>({
+        topCard: null,
+    });
+    const [players, setPlayers] = React.useState<Player[]>([]);
+    const [teams, setTeams] = React.useState<Team[]>([]);
+    const [dealerIndex, setDealerIndex] = React.useState<number | null>(null);
+    const [turnIndex, setTurnIndex] = React.useState<number | null>(null);
+    const [trumpSuit, setTrumpSuit] = React.useState<string | null>(null);
+
+    // define a function to start the game
+    const startGame = () => {
+        // create an array of cards with suits and ranks
+        const suits = ["♣", "♦", "♥", "♠"];
+        const ranks = ["9", "10", "J", "Q", "K", "A"];
+        let cards: Card[] = [];
+        for (let suit of suits) {
+            for (let rank of ranks) {
+                cards.push({ suit: suit as any, rank: rank });
+            }
+        }
+
+        // shuffle the cards using the helper function
+        let shuffledCards = shuffleCards(cards);
+
+        // create an array of players with names and hands
+        let players: Player[] = [
+            { name: "Player1", hand: [], isHuman: true },
+            { name: "Player2", hand: [], isHuman: false },
+            { name: "Player3", hand: [], isHuman: false },
+            { name: "Player4", hand: [], isHuman: false },
+        ];
+
+        // deal five cards to each player using the helper function and update their hand
+        let dealtPlayers = dealCards(shuffledCards, players);
+
+        // determine the first dealer using the helper function and assign it to dealer index state hook
+        let firstDealerIndex = determineFirstDealer(shuffledCards, players);
+
+        // set the game started state hook to true
+        setGameStarted(true);
+
+        // set the table state hook to have the top card as the sixth card from the shuffled cards array
+        setTable({ topCard: shuffledCards[5] });
+
+        // set the players state hook to the dealt players array
+        setPlayers(dealtPlayers);
+
+        // set the teams state hook to have two teams with names and scores
+        setTeams([
+            { name: "Team1", score: 0 },
+            { name: "Team2", score: 0 },
+        ]);
+
+        // set the dealer index state hook to the first dealer index
+        setDealerIndex(firstDealerIndex);
+
+        // increment the dealer index by one (or reset to zero if it reaches four) and assign it to turn index state hook
+        setTurnIndex((dealerIndex! + 1) % 4);
+    };
+
     return (
-        <div className="App">
-            <h1>Euchre</h1>
+        <div className="app">
+            {!gameStarted ? (
+                <div className="menu">
+                    <h1>Euchre Game</h1>
+                    <button onClick={startGame}>Start Game</button>
+                </div>
+            ) : (
+                <div className="game">
+                    <div className="table">
+                        {table.topCard && <CardComponent card={table.topCard} />}
+                    </div>
+
+                    {/* and four players */}
+
+                    <div className="players">
+                        {players.map((player, index) => (
+                            <PlayerComponent
+                                key={player.name}
+                                player={player}
+                                isDealer={index === dealerIndex}
+                                isTurn={index === turnIndex}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Player1 is human */}
+
+                    <div className="human-player">
+                        <PlayerComponent
+                            player={players[0]}
+                            isDealer={dealerIndex === 0}
+                            isTurn={turnIndex === 0}
+                        />
+                    </div>
+
+                    {/* The others are computer players */}
+
+                    <div className="computer-players">
+                        <PlayerComponent
+                            player={players[1]}
+                            isDealer={dealerIndex === 1}
+                            isTurn={turnIndex === 1}
+                        />
+                        <PlayerComponent
+                            player={players[2]}
+                            isDealer={dealerIndex === 2}
+                            isTurn={turnIndex === 2}
+                        />
+                        <PlayerComponent
+                            player={players[3]}
+                            isDealer={dealerIndex === 3}
+                            isTurn={turnIndex === 3}
+                        />
+                    </div>
+
+                    {/* and are displayed on screen across from each other on table just like Euchre rules state */}
+
+                    <div className="teams">
+                        <TeamComponent team={teams[0]} />
+                        <TeamComponent team={teams[1]} />
+                    </div>
+
+                    {/* In the top right of the screen, the score of each team is displayed in a box. */}
+
+                    <div className="score">
+                        <p>Team1: {teams[0].score}</p>
+                        <p>Team2: {teams[1].score}</p>
+                    </div>
+
+                    {/* In the top left of the screen, the trump is displayed in a box. */}
+
+                    <div className="trump">{trumpSuit && <p>Trump: {trumpSuit}</p>}</div>
+
+                    {/* In the bottom left of the screen, the name of the player who is the dealer is displayed in a box. */}
+
+                    <div className="dealer">
+                        {dealerIndex !== null && (
+                            <p>Dealer: {players[dealerIndex].name}</p>
+                        )}
+                    </div>
+
+                    {/* In the bottom right of the screen, the name of the player whose turn it is to play a card is displayed in a box. */}
+                </div>
+            )}
         </div>
     );
 }
