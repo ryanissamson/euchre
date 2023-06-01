@@ -66,14 +66,16 @@ function App() {
 
         // set the dealer index state hook to the first dealer index
         setDealerIndex(firstDealerIndex);
+        // log the dealer index value
+        console.log("dealer index:", dealerIndex);
 
         // increment the dealer index by one (or reset to zero if it reaches four) and assign it to turn index state hook
-        setTurnIndex((dealerIndex! + 1) % 4);
+        setTurnIndex((firstDealerIndex! + 1) % 4);
+        // log the turn index value
+        console.log("turn index:", turnIndex);
 
         // set trumpSuit state hook based on topCard suit or player choice
-        if ("suit" in table.topCard) {
-            setTrumpSuit(table.topCard.suit);
-        }
+        setTrumpSuit(shuffledCards[shuffledCards.length - 1].suit);
     };
 
     {/* filter players by isHuman property */}
@@ -106,12 +108,12 @@ function App() {
                             <PlayerComponent
                                 key={player.name}
                                 player={player}
-                                isDealer={dealerIndex === index + 1}
-                                isTurn={turnIndex === index + 1}
+                                isDealer={dealerIndex === index}
+                                isTurn={turnIndex === index}
                             />
                         ))}
                     </div>
-
+                    
                     {/* pass team prop to TeamComponent */}
                     <div className="teams">
                         <TeamComponent team={teams[0]} />
